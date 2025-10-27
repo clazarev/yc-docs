@@ -104,7 +104,7 @@ description: Следуя данной инструкции, вы сможете
 
 ## Проверьте ответ пользователя {#check-answer}
 
-После проверки пользователю выдается уникальный токен. Токен загружается в элемент `<input type="hidden" name="smart-token" value="<токен>"` внутри контейнера с виджетом. Например, так:
+После проверки пользователю выдается одноразовый токен. Токен загружается в элемент `<input type="hidden" name="smart-token" value="<токен>"` внутри контейнера с виджетом. Например, так:
 
 ```html
 <div id="captcha-container" class="smart-captcha" ...>
@@ -113,15 +113,22 @@ description: Следуя данной инструкции, вы сможете
 </div>
 ```
 
-Для проверки токена нужно отправить POST-запрос на адрес `https://smartcaptcha.yandexcloud.net/validate`, передав параметры в формате `x-www-form-urlencoded`:
+Отправьте одноразовый токен на ваш бэкенд и выполните его проверку в течение пяти минут.
 
-```
-secret=<ключ_сервера>&token=<токен>&ip=<IP-адрес_пользователя>
+Чтобы узнать результат проверки, отправьте POST-запрос на адрес `https://smartcaptcha.yandexcloud.net/validate` с типом содержимого `x-www-form-urlencoded`:
+
+```text
+POST https://smartcaptcha.yandexcloud.net/validate HTTP/1.1
+     Content-Type: application/x-www-form-urlencoded
+
+     secret=<ключ_сервера>&
+     token=<токен>&
+     ip=<IP-адрес_пользователя>
 ```
 
 Где:
 
-{% include [query-parameters](../_includes/smartcaptcha/query-parameters.md) %}
+{% include [query-parameters](../../_includes/smartcaptcha/query-parameters.md) %}
 
 В ответ сервис отправит JSON-объект с полями `status` и `message`. Когда поле `status` принимает значение `ok`, в JSON-объект добавляется поле `host`. Оно показывает, на каком сайте была пройдена проверка. Примеры ответов см. в разделе [Валидация пользователя](concepts/validation.md#service-response).
 
@@ -272,6 +279,11 @@ secret=<ключ_сервера>&token=<токен>&ip=<IP-адрес_польз
         print("Passed")
     else:
         print("Robot")
+    ```
+- C# {#csharp}
+
+    ```csharp
+  
     ```
 
 {% endlist %}
